@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <dvi v-for="n in num">{{n}}</dvi>
+</div>
+<script>
+    var config={
+        el:'#app',
+        data:{
+            num:[1,2,3,4]
+        }
+    };
+    var vue = new Vue(config)
+</script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+</head>
+<body>
+<table id="app" border="1" style="text-align: center;vertical-align: center;margin: auto">
+    <tr >
+        <td v-for="it in item">{{it}}</td>
+    </tr>
+</table>
+<script>
+    var config={
+        el :'#app',
+        data :{
+            item:null
+        },
+        methods :{
+
+        },
+        mounted :function () {
+            var param = location.search
+            console.log(param)
+            var id = param.split("=")[1]
+            console.log(id)
+
+            var serverAddress = "/item/selectItemById?itemId="+id.toString()
+            axios.get(serverAddress).then(function (response) {
+                console.log(response)
+                var serverData = response.data
+                console.log(serverData)
+                this.vue.item = serverData
+                console.log(this.vue.item)
+            }).catch()
+        }
+    }
+    var vue=new Vue(config)
+</script>
+</body>
+</html>
