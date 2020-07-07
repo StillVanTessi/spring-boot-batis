@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+</head>
+<body>
+<table id="app" style="margin: auto">
+    <tr>
+        <td>
+            <!-- 用table显示商品分类 -->
+            <table width=1000 border="1">
+                <tr>
+                    <td v-for="category in categoryList" v-on:click="getItemBtcategoryId(category.categoryId)">
+                        {{category.categoryName}}
+                    </td>
+                </tr>
+                <tr v-for="it in itemList">
+                    <td>{{it.categoryId}}</td>
+                    <td>{{it.itemDesc}}</td>
+                    <td>{{it.itemId}}</td>
+                    <td>{{it.itemImage}}</td>
+                    <td>{{it.itemName}}</td>
+                    <td>{{it.itemPrice}}</td>
+                    <td><a v-bind:href="it.detailAddress">详情</a></td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>
+
+</body>
+<script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+<script type="text/javascript">
+    //1,创建配置对象
+    var config = {
+        el : "#app",
+        data:{
+            categoryList:[],
+            itemList:[]
+        },
+        methods:{
+            getItemBtcategoryId:function (categoryId) {
+                serverAddress="/item/selectCategoryById?categoryId="+categoryId.toString()
+                axios.get(serverAddress).then(function (response) {
+                    console.log(response)
+                    var serverData = response.data
+                    for(var i=0;i<serverData.length;i++){
+                        var item = serverData[i]
+                        item.detailAddress = "detail.html?itemId="+item.itemId;
+                    }
+                    console.log(serverData)
+                    this.vue.itemList = serverData
+                }).catch(function (e) {
+
+                })
+            }
+        },
+        mounted : function() {
+            this.getItemBtcategoryId(1)
+            //mounted是网页加载完后自动执行
+            //alert("mounted")
+            //网页加载完后，联网取分类数据
+            //前端中联网
+            //1,设置服务器地址
+            var serverAddress="/category/getAll"
+            //2,发送请求
+            //then(函数)，函数是在取到数据后自动执行
+            //catch(函数)，函数是在联网失败后执行
+            axios.get(serverAddress)
+                .then(function(response){
+                    //把服务器返回的resposne显示在控制台
+                    console.log(response)
+                    //取服务器返回的数据
+                    //response中有6个属性，分别是config,header,request,status,data
+                    //服务器上的categoryController.selectAll()返回的数据在data中
+                    var serverData=response.data;
+
+                    //显示在控制台
+                    console.log(serverData);
+                    //categoryList是config.data中的categoryList
+                    this.vue.categoryList=serverData;
+                })
+                .catch(function(exception){
+                    console.log("联网失败了")
+                    console.log(exception)
+                })
+        }
+    }
+    //2,启动vue
+    var vue=new Vue(config)
+</script>
+</html>

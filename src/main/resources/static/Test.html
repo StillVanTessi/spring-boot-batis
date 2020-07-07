@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Vue Test</title>
+    <script src="https://cdn.staticfile.org/vue/2.2.2/vue.min.js"></script>
+    <script src="https://cdn.staticfile.org/axios/0.18.0/axios.min.js"></script>
+</head>
+<body>
+<table id="app1" style="margin: auto">
+    <tr>
+        <td>
+            <input id="inputCate" placeholder="请输入添加的内容">
+        </td>
+        <td>
+            <button v-on:click="btadd">添加</button>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align: center;vertical-align: middle">
+            <select name="selectCate" id="selectCate">
+                <option v-for="cate in categoryList">{{cate.name}}</option>
+            </select>
+        </td>
+        <td>
+            <button v-on:click="btrem">移除</button>
+        </td>
+    </tr>
+    <tr v-for="cate in categoryList" style="text-align: center;vertical-align: middle">
+        <td colspan="2">
+            {{cate.name}}
+        </td>
+    </tr>
+</table>
+<script>
+    new Vue({
+        el: '#app1',
+        data: {
+            categoryList: [
+                {name: "电脑1"},
+                {name: "电脑2"},
+                {name: "电脑3"},
+                {name: "电脑4"},
+                {name: "电脑5"},
+                {name: "电脑6"}
+            ]
+        },
+        methods: {
+            btadd:function () {
+                var selectvalue = document.getElementById("inputCate").value;
+                var cateadd = {name:selectvalue};
+                this.categoryList.push(cateadd);
+                document.getElementById("inputCate").value="";
+            },
+            btrem:function () {
+                var selectvalue = document.getElementById("selectCate");
+                var index = selectvalue.selectedIndex;
+                //移除元素，从第index个开始移除一个元素
+                this.categoryList.splice(index,1);
+            }
+        }
+    })
+</script>
+</body>
+</html>
